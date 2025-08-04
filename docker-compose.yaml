@@ -2,12 +2,12 @@ version: '3.8'
 services:
   web:
     image: nginx:latest
+    deploy:
+      replicas: 8
+      placement:
+        constraints: [node.role==worker]
     ports:
       - "80:80"
-    volumes:
-      - ./html:/usr/share/nginx/html
-    networks:
-      - mynetwork
   db:
     image: postgres:latest
     environment:
@@ -16,8 +16,10 @@ services:
       POSTGRES_DB: database
     volumes:
       - db_data:/var/lib/postgresql/data
-    networks:
-      - mynetwork
+    deploy:
+      replicas: 4
+      placement:
+        constraints: [node.role==worker]
   redis:
     image: redis:latest
     networks:
@@ -27,4 +29,5 @@ networks:
     driver: bridge
 
 volumes:
+
   db_data:
