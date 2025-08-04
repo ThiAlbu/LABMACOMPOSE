@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./html:/usr/share/nginx/html
+    networks:
+      - mynetwork
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: senha
+      POSTGRES_DB: database
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - mynetwork
+  redis:
+    image: redis:latest
+    networks:
+      - mynetwork
+networks:
+  mynetwork:
+    driver: bridge
+
+volumes:
+  db_data:
