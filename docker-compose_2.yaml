@@ -10,7 +10,7 @@ services:
       placement:
         constraints: [ node.role == manager ]
   db:
-    image: postgres:latest
+    image: postgres:stable
     restart: always
     shm_size: 512mb
     environment:
@@ -26,3 +26,4 @@ services:
     restart: always
     ports:
       - "8080:8080"
+
