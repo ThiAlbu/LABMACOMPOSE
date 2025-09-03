@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  coordinator:
+    image: citusdata/citus:latest
+    container_name: citus_coordinator
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: citus
+      PGPORT: 5432
+    command: >
+      postgres -c shared_preload_libraries=citus
+               -c citus.node_roles=coordinator
+    depends_on:
+      - worker1
+      - worker2
+
+  worker1:
+    image: citusdata/citus:latest
+    container_name: citus_worker1
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: citus
+      PGPORT: 5432
+    command: >
+      postgres -c shared_preload_libraries=citus
+               -c citus.node_roles=worker
+
+  worker2:
+    image: citusdata/citus:latest
+    container_name: citus_worker2
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: citus
+      PGPORT: 5432
+    command: >
+      postgres -c shared_preload_libraries=citus
+               -c citus.node_roles=worker
